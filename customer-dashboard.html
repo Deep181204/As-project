@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="styles.css">
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard</title>
+</head>
+<body>
+    <h1>Welcome to Customer Dashboard</h1>
+    
+    <h2>Menu</h2>
+    <ul id="menu">
+        <li>Pizza - $10 <button onclick="addItem('Pizza', 10)">Add to Order</button></li>
+        <li>Drink - $2 <button onclick="addItem('Drink', 2)">Add to Order</button></li>
+        <!-- Add more menu items here -->
+    </ul>
+    
+    <h2>Your Order</h2>
+    <ul id="order-list">
+        <!-- Customer's order items will be displayed here -->
+    </ul>
+    
+    <p>Total: $<span id="total">0</span></p>
+    
+    <button onclick="placeOrder()">Place Order</button>
+
+    <script>
+        let order = [];
+        let total = 0;
+
+        function addItem(item, price) {
+            order.push({ item, price });
+            total += price;
+            updateOrderList();
+            updateTotal();
+        }
+
+        function removeItem(index) {
+            total -= order[index].price;
+            order.splice(index, 1);
+            updateOrderList();
+            updateTotal();
+        }
+
+        function updateOrderList() {
+            const orderList = document.getElementById('order-list');
+            orderList.innerHTML = '';
+            order.forEach((item, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${item.item} - $${item.price} `;
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = () => removeItem(index);
+                listItem.appendChild(deleteButton);
+                orderList.appendChild(listItem);
+            });
+        }
+
+        function updateTotal() {
+            document.getElementById('total').textContent = total.toFixed(2);
+        }
+
+        function placeOrder() {
+            // Here you can implement logic to send the order to the backend
+            console.log('Placing order:', order);
+            console.log('Total:', total);
+            // After placing the order, you can clear the order list and reset the total
+            order = [];
+            total = 0;
+            updateOrderList();
+            updateTotal();
+            alert('Your order has been placed!');
+        }
+    </script>
+</body>
+</html>
